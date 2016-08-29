@@ -14,7 +14,7 @@
  - Initialize view and click properties at 0
  - Have each object push itself into the images array
 - Iterate through each image path to create all instances of the image constructor
-  - Set the name property to the image path
+  - Set the name and path properties
 - Create and get necessary elements
  - li, image id
  - Need to get the proper node before anything else, and create the list items once before looping through more
