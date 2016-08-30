@@ -3,11 +3,21 @@
 var imagePaths = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'usb.gif', 'water-can.jpg', 'wine-glass.jpg'];
 var images = [];
 
+function Img(name, path) {
+  this.views = 0;
+  this.clicks = 0;
+  this.name = name;
+  this.path = path;
+  images.push(this);
+}
+
 for(var i = 0; i < imagePaths.length; i++) {
   var imgName = imagePaths[i].split('.')[0];
   // console.log('imgName', imgName);
   var imgPath = imagePaths[i];
   new Img(imgName, imgPath);
+  console.log('New image:', Img);
+
 }
 
 var imageList = document.getElementById('images');
@@ -18,7 +28,7 @@ drawImage();
 drawImage();
 drawImage();
 
-function clickHandler(e) {
+function clickHandler() {
   imageList.textContent = '';
 
   drawImage();
@@ -34,18 +44,11 @@ function drawImage() {
   // console.log('randomIndex', randomIndex)
   var randomImage = imagePaths[randomIndex];
 
-
   img.setAttribute('src', 'imgs/' + randomImage);
   // console.log(img);
+  var attr = img.getAttribute('src');
+  console.log(attr);
 
   li.appendChild(img);
   imageList.appendChild(li);
-}
-
-function Img(name, path) {
-  this.views = 0;
-  this.clicks = 0;
-  this.name = name;
-  this.path = path;
-  images.push(this);
 }

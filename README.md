@@ -21,7 +21,7 @@
   - Add the event listener before creating the first two list items
 - Make the click handler function, taking 'e' as an argument
  - clear the list before drawing more images
-
-
 - Attach list items (images) to the DOM
- -  
+
+## Phase 2
+- To track the clicks on each image, I need to increment the this.clicks property in each object as they are clicked.
