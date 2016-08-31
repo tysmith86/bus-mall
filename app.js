@@ -132,17 +132,20 @@ function chartClickHandler() {
 
   var imageNames = [];
   var imageClicks = [];
+  var imageViews = [];
   for (i = 0; i < images.length; i++) {
     imageNames.push(images[i].name);
     imageClicks.push(images[i].clicks);
+    imageViews.push(images[i].views);
   };
 
   jsonImages = JSON.stringify(images);
   localStorage.setItem('jsonImages', jsonImages);
 
-  var ctx = document.getElementById('my_chart');
+  var ctx = document.getElementById('clicks_chart');
+  var cty = document.getElementById('views_chart');
 
-  var myChart = new Chart(ctx, { // eslint-disable-line
+  var clicksChart = new Chart(ctx, { // eslint-disable-line
     type: 'bar',
     data: {
       labels: imageNames,
@@ -202,6 +205,71 @@ function chartClickHandler() {
           ticks: {
             beginAtZero: true,
             stepSize: 5
+          }
+        }]
+      }
+    }
+  });
+  var viewsChart = new Chart(cty, { // eslint-disable-line
+    type: 'bar',
+    data: {
+      labels: imageNames,
+      datasets: [{
+        label: '# of Views',
+        data: imageViews,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            stepSize: 20
           }
         }]
       }

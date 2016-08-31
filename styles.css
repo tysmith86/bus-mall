@@ -45,7 +45,12 @@ li {
   padding: 40px;
 }
 
-#my_chart {
+#clicks_chart {
+  border: 2px solid black;
+  background-color: white;
+}
+
+#views_chart {
   border: 2px solid black;
   background-color: white;
 }
