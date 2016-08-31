@@ -3,6 +3,7 @@
 var imagePaths = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'usb.gif', 'water-can.jpg', 'wine-glass.jpg'];
 var images = [];
 var currentImageIndices = [0, 1, 2];
+var totalClicks = 0;
 
 function Img(name, path) {
   this.views = 0;
@@ -35,6 +36,18 @@ drawImage(2);
 function clickHandler(event) {
   // console.log('Event Target:', event.target);
   var matchPath = event.target.getAttribute('src');
+  if (totalClicks >= 25) {
+    var chartButton = document.getElementById('show_chart');
+    chartButton.setAttribute('class', '');
+    return;
+  }
+
+  if(!matchPath) {
+    alert('Click a picture');
+    return;
+  }
+
+  totalClicks += 1;
   console.log('Match Path:', matchPath);
   var arrayOfRandomIndices = randomIndices();
   for(var i = 0; i < currentImageIndices.length; i++) {
@@ -74,10 +87,13 @@ function randomIndices() {
   var firstRandomIndex = randomIndex();
   var secondRandomIndex = randomIndex();
   var thirdRandomIndex = randomIndex();
-  while(secondRandomIndex === firstRandomIndex) {
+  while(currentImageIndices.indexOf(firstRandomIndex) !== -1) {
+    firstRandomIndex = randomIndex();
+  }
+  while(secondRandomIndex === firstRandomIndex || currentImageIndices.indexOf(secondRandomIndex) !== -1) {
     secondRandomIndex = randomIndex();
   }
-  while(thirdRandomIndex === secondRandomIndex || thirdRandomIndex === firstRandomIndex) {
+  while(thirdRandomIndex === secondRandomIndex || thirdRandomIndex === firstRandomIndex || currentImageIndices.indexOf(thirdRandomIndex) !== -1) {
     thirdRandomIndex = randomIndex();
   }
   return [firstRandomIndex, secondRandomIndex, thirdRandomIndex];
@@ -100,49 +116,61 @@ function randomIndex() {
   return Math.floor(Math.random() * imagePaths.length);
 }
 
-var imageNames = [];
-var imageClicks = [];
-for (i = 0; i < images.length; i++) {
-  imageNames.push(images[i].name);
-  imageClicks.push(images[i].clicks);
-};
+var chartButton = document.getElementById('show_chart');
+chartButton.addEventListener('click', chartClickHandler);
 
-var ctx = document.getElementById('my_chart');
+var chartClicked = false;
 
-var myChart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: imageNames,
-    datasets: [{
-      label: '# of Votes',
-      data: imageClicks,
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)'
-      ],
-      borderColor: [
-        'rgba(255,99,132,1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)'
-      ],
-      borderWidth: 1
-    }]
-  },
-  options: {
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true,
-          stepSize: 1
-        }
+function chartClickHandler() {
+
+  var imageNames = [];
+  var imageClicks = [];
+  for (i = 0; i < images.length; i++) {
+    imageNames.push(images[i].name);
+    imageClicks.push(images[i].clicks);
+  };
+
+  var ctx = document.getElementById('my_chart');
+
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: imageNames,
+      datasets: [{
+        label: '# of Votes',
+        data: imageClicks,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
       }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            stepSize: 1
+          }
+        }]
+      }
     }
-  }
-});
+  });
+  chartButton.disabled = true;
+}
+
+
+// currentImageIndices.indexOf(firstRandomIndex) !== -1

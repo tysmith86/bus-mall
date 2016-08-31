@@ -20,3 +20,7 @@ li {
   width: 1100px;
   margin: auto;
 }
+
+.hidden {
+  visibility: hidden;
+}
