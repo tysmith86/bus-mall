@@ -47,7 +47,9 @@ function clickHandler(event) {
   var matchPath = event.target.getAttribute('src');
   if (totalClicks >= 25) {
     var chartButton = document.getElementById('show_chart');
+    var resetButton = document.getElementById('clear_storage');
     chartButton.setAttribute('class', '');
+    resetButton.setAttribute('class', '');
     return;
   }
   if(!matchPath) {
@@ -125,6 +127,12 @@ function randomIndex() {
 
 var chartButton = document.getElementById('show_chart');
 chartButton.addEventListener('click', chartClickHandler);
+
+resetButton.addEventListener('click', resetClickHandler);
+
+function resetClickHandler() {
+  localStorage.clear();
+};
 
 function chartClickHandler() {
   var chartCanvas = document.getElementById('chart');
