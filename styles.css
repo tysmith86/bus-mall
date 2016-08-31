@@ -1,19 +1,37 @@
+body {
+  position: relative;
+}
+
+h1 {
+  text-align: center;
+  font-size: 50px;
+}
+
 #images {
   list-style: none;
   margin: auto;
   text-align: center;
-  width: 1300px;
+  width: 1220px;
+  border: 3px solid black;
+  padding: 40px;
 }
 
 img {
   display: inline-block;
-  width: 400px;
+  width: 394px;
+  height: 394px;
   border: 3px solid black;
+}
+
+ul :last-child {
+  margin-right: 0;
 }
 
 li {
   display: inline-block;
-  width: 400px;
+  width: 394px;
+  height: 394px;
+  margin-right: 10px;
 }
 
 #chart {
@@ -23,4 +41,9 @@ li {
 
 .hidden {
   visibility: hidden;
+}
+
+button {
+  display: block;
+  margin: 2px auto;
 }

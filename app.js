@@ -171,6 +171,3 @@ function chartClickHandler() {
   });
   chartButton.disabled = true;
 }
-
-
-// currentImageIndices.indexOf(firstRandomIndex) !== -1
