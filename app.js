@@ -51,7 +51,6 @@ function clickHandler(event) {
     return;
   }
   if(!matchPath) {
-    alert('Click a picture');
     return;
   }
 
@@ -128,6 +127,8 @@ var chartButton = document.getElementById('show_chart');
 chartButton.addEventListener('click', chartClickHandler);
 
 function chartClickHandler() {
+  var chartCanvas = document.getElementById('chart');
+  chartCanvas.setAttribute('class', '');
 
   var imageNames = [];
   var imageClicks = [];
@@ -141,7 +142,7 @@ function chartClickHandler() {
 
   var ctx = document.getElementById('my_chart');
 
-  var myChart = new Chart(ctx, {
+  var myChart = new Chart(ctx, { // eslint-disable-line
     type: 'bar',
     data: {
       labels: imageNames,
@@ -200,7 +201,7 @@ function chartClickHandler() {
         yAxes: [{
           ticks: {
             beginAtZero: true,
-            stepSize: 1
+            stepSize: 5
           }
         }]
       }
