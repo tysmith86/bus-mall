@@ -1,17 +1,22 @@
 #images {
   list-style: none;
+  margin: auto;
+  text-align: center;
+  width: 1300px;
 }
 
 img {
   display: inline-block;
-  width: 300px;
+  width: 400px;
+  border: 3px solid black;
 }
 
 li {
   display: inline-block;
-  width: 300px;
+  width: 400px;
 }
 
-#my_chart {
-  width: 500px;
+#chart {
+  width: 1100px;
+  margin: auto;
 }

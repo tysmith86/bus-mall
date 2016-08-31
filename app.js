@@ -30,6 +30,8 @@ drawImage(0);
 drawImage(1);
 drawImage(2);
 
+// var votes;
+
 function clickHandler(event) {
   // console.log('Event Target:', event.target);
   var matchPath = event.target.getAttribute('src');
@@ -43,11 +45,13 @@ function clickHandler(event) {
     // console.log('Views:', displayedObject.views);
   }
 
+
   for (var j = 0; j < images.length; j++) {
     var currentImageObject = images[j];
     if(currentImageObject.path === matchPath) {
       console.log('Clicked', currentImageObject);
       currentImageObject.clicks += 1;
+      voteCounter();
     };
   }
   currentImageIndices = arrayOfRandomIndices;
@@ -55,6 +59,14 @@ function clickHandler(event) {
   drawImage(arrayOfRandomIndices[0]);
   drawImage(arrayOfRandomIndices[1]);
   drawImage(arrayOfRandomIndices[2]);
+}
+
+function voteCounter() {
+  var votes = [];
+  for (i = 0; i < images.length; i++) {
+    votes.push(images[i].clicks);
+  };
+  return votes;
 }
 
 // this code is working correctly
@@ -88,17 +100,22 @@ function randomIndex() {
   return Math.floor(Math.random() * imagePaths.length);
 }
 
-
+var imageNames = [];
+var imageClicks = [];
+for (i = 0; i < images.length; i++) {
+  imageNames.push(images[i].name);
+  imageClicks.push(images[i].clicks);
+};
 
 var ctx = document.getElementById('my_chart');
 
 var myChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: ['test 1', 'test 2', 'test 3', 'test 4', 'test 5'],
+    labels: imageNames,
     datasets: [{
       label: '# of Votes',
-      data: [5, 9, 10, 4, 3, 2],
+      data: imageClicks,
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -122,7 +139,8 @@ var myChart = new Chart(ctx, {
     scales: {
       yAxes: [{
         ticks: {
-          beginAtZero: true
+          beginAtZero: true,
+          stepSize: 1
         }
       }]
     }
