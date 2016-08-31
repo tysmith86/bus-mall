@@ -25,3 +25,5 @@
 
 ## Phase 2
 - To track the clicks on each image, I need to increment the this.clicks property in each object as they are clicked.
+- I need to find the corresponding object by iterating over the objects array
+ - Check for a matching property (source) and, if matched, do something
