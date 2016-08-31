@@ -5,6 +5,23 @@ var images = [];
 var currentImageIndices = [0, 1, 2];
 var totalClicks = 0;
 
+// get local storage, then check the length of the array
+var jsonImages = JSON.parse(localStorage.getItem('jsonImages'));
+console.log('jsonImages length:', jsonImages.length);
+
+if (jsonImages.length === imagePaths.length) {
+  images = jsonImages;
+} else {
+  for(var i = 0; i < imagePaths.length; i++) {
+    var imgName = imagePaths[i].split('.')[0];
+    // console.log('imgName', imgName);
+    var imgPath = imagePaths[i];
+    new Img(imgName, imgPath);
+    // console.log('New image:', Img);
+  }
+}
+
+
 function Img(name, path) {
   this.views = 0;
   this.clicks = 0;
@@ -14,14 +31,6 @@ function Img(name, path) {
   images.push(this);
 }
 
-for(var i = 0; i < imagePaths.length; i++) {
-  var imgName = imagePaths[i].split('.')[0];
-  // console.log('imgName', imgName);
-  var imgPath = imagePaths[i];
-  new Img(imgName, imgPath);
-  // console.log('New image:', Img);
-
-}
 
 var imageList = document.getElementById('images');
 
@@ -41,19 +50,18 @@ function clickHandler(event) {
     chartButton.setAttribute('class', '');
     return;
   }
-
   if(!matchPath) {
     alert('Click a picture');
     return;
   }
 
   totalClicks += 1;
-  console.log('Match Path:', matchPath);
+  // console.log('Match Path:', matchPath);
   var arrayOfRandomIndices = randomIndices();
   for(var i = 0; i < currentImageIndices.length; i++) {
     var currentIndex = currentImageIndices[i];
     var displayedObject = images[currentIndex];
-    console.log('Previous Displayed', displayedObject);
+    // console.log('Previous Displayed', displayedObject);
     displayedObject.views += 1;
     // console.log('Views:', displayedObject.views);
   }
@@ -62,7 +70,7 @@ function clickHandler(event) {
   for (var j = 0; j < images.length; j++) {
     var currentImageObject = images[j];
     if(currentImageObject.path === matchPath) {
-      console.log('Clicked', currentImageObject);
+      // console.log('Clicked', currentImageObject);
       currentImageObject.clicks += 1;
       voteCounter();
     };
@@ -119,8 +127,6 @@ function randomIndex() {
 var chartButton = document.getElementById('show_chart');
 chartButton.addEventListener('click', chartClickHandler);
 
-var chartClicked = false;
-
 function chartClickHandler() {
 
   var imageNames = [];
@@ -129,6 +135,9 @@ function chartClickHandler() {
     imageNames.push(images[i].name);
     imageClicks.push(images[i].clicks);
   };
+
+  jsonImages = JSON.stringify(images);
+  localStorage.setItem('jsonImages', jsonImages);
 
   var ctx = document.getElementById('my_chart');
 
@@ -140,20 +149,48 @@ function chartClickHandler() {
         label: '# of Votes',
         data: imageClicks,
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)'
         ],
         borderColor: [
-          'rgba(255,99,132,1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)'
         ],
         borderWidth: 1
       }]
