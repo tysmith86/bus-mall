@@ -73,7 +73,11 @@ li {
   visibility: hidden;
 }
 
+#buttons {
+  margin: auto;
+  width: 300px;
+}
+
 button {
-  display: block;
   margin: 2px auto;
 }

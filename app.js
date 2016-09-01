@@ -39,8 +39,6 @@ drawImage(0);
 drawImage(1);
 drawImage(2);
 
-// refreshes page
-var resetButton = document.getElementById('restart');
 
 // clickHandler for image clicks
 function clickHandler(event) {
@@ -51,6 +49,7 @@ function clickHandler(event) {
     var chartButton = document.getElementById('show_chart');
     chartButton.setAttribute('class', '');
     resetButton.setAttribute('class', '');
+    clearButton.setAttribute('class', '');
     return;
   }
   // if area outside of pictures, but inside ul is clicked, the function short circuits
@@ -127,14 +126,21 @@ function randomIndex() {
   return Math.floor(Math.random() * imagePaths.length);
 }
 
+// refreshes page
+var resetButton = document.getElementById('restart');
+var clearButton = document.getElementById('clear');
 var chartButton = document.getElementById('show_chart');
 chartButton.addEventListener('click', chartClickHandler);
-
 resetButton.addEventListener('click', resetClickHandler);
+clearButton.addEventListener('click', clearClickHandler);
 
 function resetClickHandler() {
   location.reload();
 };
+
+function clearClickHandler() {
+  localStorage.clear();
+}
 
 function chartClickHandler() {
   var chartCanvas = document.getElementById('chart');
