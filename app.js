@@ -7,8 +7,7 @@ var totalClicks = 0;
 
 // get local storage, then check the length of the array
 var jsonImages = JSON.parse(localStorage.getItem('jsonImages'));
-console.log('jsonImages length:', jsonImages.length);
-
+// var jsonImages = [];
 if (jsonImages.length === imagePaths.length) {
   images = jsonImages;
 } else {
@@ -40,14 +39,14 @@ drawImage(0);
 drawImage(1);
 drawImage(2);
 
-// var votes;
+
+var resetButton = document.getElementById('clear_storage');
 
 function clickHandler(event) {
   // console.log('Event Target:', event.target);
   var matchPath = event.target.getAttribute('src');
   if (totalClicks >= 25) {
     var chartButton = document.getElementById('show_chart');
-    var resetButton = document.getElementById('clear_storage');
     chartButton.setAttribute('class', '');
     resetButton.setAttribute('class', '');
     return;
@@ -131,7 +130,7 @@ chartButton.addEventListener('click', chartClickHandler);
 resetButton.addEventListener('click', resetClickHandler);
 
 function resetClickHandler() {
-  localStorage.clear();
+  location.reload();
 };
 
 function chartClickHandler() {
@@ -205,7 +204,7 @@ function chartClickHandler() {
           'rgba(75, 192, 192, 0.6)'
         ],
         borderWidth: 1
-      }]
+      }],
     },
     options: {
       scales: {
