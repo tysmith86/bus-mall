@@ -6,10 +6,10 @@ var currentImageIndices = [0, 1, 2];
 var totalClicks = 0;
 
 // get local storage, then check the length of the array
-var jsonImages = JSON.parse(localStorage.getItem('jsonImages'));
+
 // var jsonImages = [];
-if (jsonImages.length === imagePaths.length) {
-  images = jsonImages;
+if (localStorage.length === 1) {
+  images = JSON.parse(localStorage.getItem('jsonImages'));
 } else {
   for(var i = 0; i < imagePaths.length; i++) {
     var imgName = imagePaths[i].split('.')[0];
@@ -146,7 +146,7 @@ function chartClickHandler() {
     imageViews.push(images[i].views);
   };
 
-  jsonImages = JSON.stringify(images);
+  var jsonImages = JSON.stringify(images);
   localStorage.setItem('jsonImages', jsonImages);
 
   var ctx = document.getElementById('clicks_chart');
