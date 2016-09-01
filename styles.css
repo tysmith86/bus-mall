@@ -5,6 +5,7 @@ body {
 h1 {
   text-align: center;
   font-size: 50px;
+  padd
 }
 
 #images {
@@ -19,6 +20,7 @@ h1 {
   margin: auto;
   width: 1220px;
   padding: 40px;
+  padding-top: 20px;
   text-align: center;
   border: 3px solid black;
   border-radius: 40px;
