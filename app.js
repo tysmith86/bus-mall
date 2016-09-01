@@ -3,6 +3,23 @@
 var imagePaths = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'usb.gif', 'water-can.jpg', 'wine-glass.jpg'];
 var images = [];
 var currentImageIndices = [0, 1, 2];
+var totalClicks = 0;
+
+// get local storage, then check the length of the array
+var jsonImages = JSON.parse(localStorage.getItem('jsonImages'));
+// var jsonImages = [];
+if (jsonImages.length === imagePaths.length) {
+  images = jsonImages;
+} else {
+  for(var i = 0; i < imagePaths.length; i++) {
+    var imgName = imagePaths[i].split('.')[0];
+    // console.log('imgName', imgName);
+    var imgPath = imagePaths[i];
+    new Img(imgName, imgPath);
+    // console.log('New image:', Img);
+  }
+}
+
 
 function Img(name, path) {
   this.views = 0;
@@ -13,14 +30,6 @@ function Img(name, path) {
   images.push(this);
 }
 
-for(var i = 0; i < imagePaths.length; i++) {
-  var imgName = imagePaths[i].split('.')[0];
-  // console.log('imgName', imgName);
-  var imgPath = imagePaths[i];
-  new Img(imgName, imgPath);
-  // console.log('New image:', Img);
-
-}
 
 var imageList = document.getElementById('images');
 
@@ -30,24 +39,40 @@ drawImage(0);
 drawImage(1);
 drawImage(2);
 
+
+var resetButton = document.getElementById('clear_storage');
+
 function clickHandler(event) {
   // console.log('Event Target:', event.target);
   var matchPath = event.target.getAttribute('src');
-  console.log('Match Path:', matchPath);
+  if (totalClicks >= 25) {
+    var chartButton = document.getElementById('show_chart');
+    chartButton.setAttribute('class', '');
+    resetButton.setAttribute('class', '');
+    return;
+  }
+  if(!matchPath) {
+    return;
+  }
+
+  totalClicks += 1;
+  // console.log('Match Path:', matchPath);
   var arrayOfRandomIndices = randomIndices();
   for(var i = 0; i < currentImageIndices.length; i++) {
     var currentIndex = currentImageIndices[i];
     var displayedObject = images[currentIndex];
-    console.log('Previous Displayed', displayedObject);
+    // console.log('Previous Displayed', displayedObject);
     displayedObject.views += 1;
     // console.log('Views:', displayedObject.views);
   }
 
+
   for (var j = 0; j < images.length; j++) {
     var currentImageObject = images[j];
     if(currentImageObject.path === matchPath) {
-      console.log('Clicked', currentImageObject);
+      // console.log('Clicked', currentImageObject);
       currentImageObject.clicks += 1;
+      voteCounter();
     };
   }
   currentImageIndices = arrayOfRandomIndices;
@@ -57,15 +82,26 @@ function clickHandler(event) {
   drawImage(arrayOfRandomIndices[2]);
 }
 
+function voteCounter() {
+  var votes = [];
+  for (i = 0; i < images.length; i++) {
+    votes.push(images[i].clicks);
+  };
+  return votes;
+}
+
 // this code is working correctly
 function randomIndices() {
   var firstRandomIndex = randomIndex();
   var secondRandomIndex = randomIndex();
   var thirdRandomIndex = randomIndex();
-  while(secondRandomIndex === firstRandomIndex) {
+  while(currentImageIndices.indexOf(firstRandomIndex) !== -1) {
+    firstRandomIndex = randomIndex();
+  }
+  while(secondRandomIndex === firstRandomIndex || currentImageIndices.indexOf(secondRandomIndex) !== -1) {
     secondRandomIndex = randomIndex();
   }
-  while(thirdRandomIndex === secondRandomIndex || thirdRandomIndex === firstRandomIndex) {
+  while(thirdRandomIndex === secondRandomIndex || thirdRandomIndex === firstRandomIndex || currentImageIndices.indexOf(thirdRandomIndex) !== -1) {
     thirdRandomIndex = randomIndex();
   }
   return [firstRandomIndex, secondRandomIndex, thirdRandomIndex];
@@ -88,43 +124,163 @@ function randomIndex() {
   return Math.floor(Math.random() * imagePaths.length);
 }
 
+var chartButton = document.getElementById('show_chart');
+chartButton.addEventListener('click', chartClickHandler);
 
+resetButton.addEventListener('click', resetClickHandler);
 
-var ctx = document.getElementById('my_chart');
+function resetClickHandler() {
+  location.reload();
+};
 
-var myChart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: ['test 1', 'test 2', 'test 3', 'test 4', 'test 5'],
-    datasets: [{
-      label: '# of Votes',
-      data: [5, 9, 10, 4, 3, 2],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)'
-      ],
-      borderColor: [
-        'rgba(255,99,132,1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)'
-      ],
-      borderWidth: 1
-    }]
-  },
-  options: {
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true
-        }
-      }]
+function chartClickHandler() {
+  var chartCanvas = document.getElementById('chart');
+  chartCanvas.setAttribute('class', '');
+
+  var imageNames = [];
+  var imageClicks = [];
+  var imageViews = [];
+  for (i = 0; i < images.length; i++) {
+    imageNames.push(images[i].name);
+    imageClicks.push(images[i].clicks);
+    imageViews.push(images[i].views);
+  };
+
+  jsonImages = JSON.stringify(images);
+  localStorage.setItem('jsonImages', jsonImages);
+
+  var ctx = document.getElementById('clicks_chart');
+  var cty = document.getElementById('views_chart');
+
+  var clicksChart = new Chart(ctx, { // eslint-disable-line
+    type: 'bar',
+    data: {
+      labels: imageNames,
+      datasets: [{
+        label: '# of Votes',
+        data: imageClicks,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)'
+        ],
+        borderWidth: 1
+      }],
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            stepSize: 5
+          }
+        }]
+      }
     }
-  }
-});
+  });
+  var viewsChart = new Chart(cty, { // eslint-disable-line
+    type: 'bar',
+    data: {
+      labels: imageNames,
+      datasets: [{
+        label: '# of Views',
+        data: imageViews,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            stepSize: 20
+          }
+        }]
+      }
+    }
+  });
+  chartButton.disabled = true;
+}

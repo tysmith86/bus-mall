@@ -1,17 +1,79 @@
+body {
+  position: relative;
+}
+
+h1 {
+  text-align: center;
+  font-size: 50px;
+}
+
 #images {
   list-style: none;
+  margin-top: 20px;
+  text-align: center;
+  width: 1220px;
+  padding: 0;
+}
+
+#container {
+  margin: auto;
+  width: 1220px;
+  padding: 40px;
+  text-align: center;
+  border: 3px solid black;
+  border-radius: 40px;
+  background-color: rgb(0, 0, 100);
+  font-size: 50px;
+  color: white;
+  font-weight: bold;
 }
 
 img {
   display: inline-block;
-  width: 300px;
+  width: 394px;
+  height: 394px;
+  border: 3px outset black;
+}
+
+ul {
+  margin: auto;
+}
+
+ul :last-child {
+  margin-right: 0;
 }
 
 li {
   display: inline-block;
-  width: 300px;
+  width: 394px;
+  height: 394px;
+  margin-right: 10px;
 }
 
-#my_chart {
-  width: 500px;
+#chart {
+  width: 1220px;
+  margin: auto;
+  border: 3px solid black;
+  border-radius: 40px;
+  background-color: rgb(0, 0, 100);
+  padding: 40px;
+}
+
+#clicks_chart {
+  border: 2px solid black;
+  background-color: white;
+}
+
+#views_chart {
+  border: 2px solid black;
+  background-color: white;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+button {
+  display: block;
+  margin: 2px auto;
 }
