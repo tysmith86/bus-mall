@@ -5,11 +5,11 @@ var images = [];
 var currentImageIndices = [0, 1, 2];
 var totalClicks = 0;
 
-// get local storage, then check the length of the array
-var jsonImages = JSON.parse(localStorage.getItem('jsonImages'));
-// var jsonImages = [];
-if (jsonImages.length === imagePaths.length) {
-  images = jsonImages;
+// checks the length of local storage
+// if there is something in local storage, set the images array equal to that parsed value
+// if there is nothing in local storage, generate the image array from scratch
+if (localStorage.length === 1) {
+  images = JSON.parse(localStorage.getItem('jsonImages'));
 } else {
   for(var i = 0; i < imagePaths.length; i++) {
     var imgName = imagePaths[i].split('.')[0];
@@ -20,7 +20,7 @@ if (jsonImages.length === imagePaths.length) {
   }
 }
 
-
+// Img constructor
 function Img(name, path) {
   this.views = 0;
   this.clicks = 0;
@@ -39,18 +39,21 @@ drawImage(0);
 drawImage(1);
 drawImage(2);
 
+// refreshes page
+var resetButton = document.getElementById('restart');
 
-var resetButton = document.getElementById('clear_storage');
-
+// clickHandler for image clicks
 function clickHandler(event) {
   // console.log('Event Target:', event.target);
   var matchPath = event.target.getAttribute('src');
+  // ends the survey at 25 clicks, and removes the hidden class from the buttons
   if (totalClicks >= 25) {
     var chartButton = document.getElementById('show_chart');
     chartButton.setAttribute('class', '');
     resetButton.setAttribute('class', '');
     return;
   }
+  // if area outside of pictures, but inside ul is clicked, the function short circuits
   if(!matchPath) {
     return;
   }
@@ -146,7 +149,7 @@ function chartClickHandler() {
     imageViews.push(images[i].views);
   };
 
-  jsonImages = JSON.stringify(images);
+  var jsonImages = JSON.stringify(images);
   localStorage.setItem('jsonImages', jsonImages);
 
   var ctx = document.getElementById('clicks_chart');
