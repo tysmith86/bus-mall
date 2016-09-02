@@ -1,22 +1,21 @@
 'use strict';
 
 var imagePaths = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'usb.gif', 'water-can.jpg', 'wine-glass.jpg'];
-var images = [];
+var images = JSON.parse(localStorage.getItem('jsonImages'));
 var currentImageIndices = [0, 1, 2];
 var totalClicks = 0;
 
 // checks the length of local storage
 // if there is something in local storage, set the images array equal to that parsed value
 // if there is nothing in local storage, generate the image array from scratch
-if (localStorage.length === 1) {
-  images = JSON.parse(localStorage.getItem('jsonImages'));
-} else {
+if (!images) {
+  images = [];
   for(var i = 0; i < imagePaths.length; i++) {
     var imgName = imagePaths[i].split('.')[0];
-    // console.log('imgName', imgName);
+  // console.log('imgName', imgName);
     var imgPath = imagePaths[i];
     new Img(imgName, imgPath);
-    // console.log('New image:', Img);
+  // console.log('New image:', Img);
   }
 }
 
@@ -140,6 +139,7 @@ function resetClickHandler() {
 
 function clearClickHandler() {
   localStorage.clear();
+  location.reload();
 }
 
 function chartClickHandler() {
