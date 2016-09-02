@@ -5,9 +5,7 @@ var images = JSON.parse(localStorage.getItem('jsonImages'));
 var currentImageIndices = [0, 1, 2];
 var totalClicks = 0;
 
-// checks the length of local storage
-// if there is something in local storage, set the images array equal to that parsed value
-// if there is nothing in local storage, generate the image array from scratch
+// if images equals null, this code creates the images array
 if (!images) {
   images = [];
   for(var i = 0; i < imagePaths.length; i++) {
@@ -124,6 +122,18 @@ function randomIndex() {
   return Math.floor(Math.random() * imagePaths.length);
 }
 
+// calculates percentage of clicks per view
+var percentageClicksArray = [];
+for (var i = 0; i < images.length; i++) {
+  var clicksPerView = images[i].clicks / images[i].views;
+  if (clicksPerView === NaN) {
+    clicksPerView = 0;
+  }
+  var clickPercentage = Math.floor(clicksPerView * 100);
+  // console.log('Clicks per View:', clickPercentage);
+  percentageClicksArray.push(clickPercentage);
+}
+
 var resetButton = document.getElementById('restart');
 var clearButton = document.getElementById('clear');
 var chartButton = document.getElementById('show_chart');
@@ -160,6 +170,7 @@ function chartClickHandler() {
   localStorage.setItem('jsonImages', jsonImages);
 
   var ctx = document.getElementById('data_chart');
+  var cty = document.getElementById('percent_chart');
 
   var clicksChart = new Chart(ctx, { // eslint-disable-line
     type: 'bar',
@@ -262,8 +273,8 @@ function chartClickHandler() {
           'rgb(0, 0, 255)',
           'rgb(0, 0, 255)'
         ],
-        borderWidth: 1
-      }
+          borderWidth: 1
+        }
 
     ],
     },
@@ -278,6 +289,76 @@ function chartClickHandler() {
       }
     }
   });
+
+  var percentChart = new Chart(cty, { // eslint-disable-line
+    type: 'bar',
+    data: {
+      labels: imageNames,
+      datasets: [{
+        label: 'Clicks per Views',
+        data: percentageClicksArray,
+        backgroundColor: [
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)'
+        ],
+        borderColor: [
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)',
+          'rgb(255, 0, 0)'
+        ],
+        borderWidth: 1
+      },
+
+    ],
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            stepSize: 5
+          }
+        }]
+      }
+    }
+  });
+
+
 
   chartButton.disabled = true;
 }

@@ -64,6 +64,11 @@ li {
   background-color: white;
 }
 
+#percent_chart {
+  border: 2px solid black;
+  background-color: white;
+}
+
 .hidden {
   visibility: hidden;
 }
