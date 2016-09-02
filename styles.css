@@ -59,12 +59,7 @@ li {
   padding: 40px;
 }
 
-#clicks_chart {
-  border: 2px solid black;
-  background-color: white;
-}
-
-#views_chart {
+#data_chart {
   border: 2px solid black;
   background-color: white;
 }
