@@ -43,7 +43,7 @@ function clickHandler(event) {
   // console.log('Event Target:', event.target);
   var matchPath = event.target.getAttribute('src');
   // ends the survey at 25 clicks, and removes the hidden class from the buttons
-  if (totalClicks >= 200) {
+  if (totalClicks >= 25) {
     var chartButton = document.getElementById('show_chart');
     chartButton.classList.remove("hidden");
     resetButton.classList.remove("hidden");
