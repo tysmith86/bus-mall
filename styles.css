@@ -5,7 +5,6 @@ body {
 h1 {
   text-align: center;
   font-size: 50px;
-  padd
 }
 
 #images {
@@ -20,7 +19,6 @@ h1 {
   margin: auto;
   width: 1220px;
   padding: 40px;
-  padding-top: 20px;
   text-align: center;
   border: 3px solid black;
   border-radius: 40px;
@@ -61,12 +59,7 @@ li {
   padding: 40px;
 }
 
-#clicks_chart {
-  border: 2px solid black;
-  background-color: white;
-}
-
-#views_chart {
+#data_chart {
   border: 2px solid black;
   background-color: white;
 }
