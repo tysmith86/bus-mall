@@ -122,18 +122,6 @@ function randomIndex() {
   return Math.floor(Math.random() * imagePaths.length);
 }
 
-// calculates percentage of clicks per view
-var percentageClicksArray = [];
-for (var i = 0; i < images.length; i++) {
-  var clicksPerView = images[i].clicks / images[i].views;
-  if (clicksPerView === NaN) {
-    clicksPerView = 0;
-  }
-  var clickPercentage = Math.floor(clicksPerView * 100);
-  // console.log('Clicks per View:', clickPercentage);
-  percentageClicksArray.push(clickPercentage);
-}
-
 var resetButton = document.getElementById('restart');
 var clearButton = document.getElementById('clear');
 var chartButton = document.getElementById('show_chart');
@@ -155,6 +143,17 @@ function clearClickHandler() {
 function chartClickHandler() {
   var chartCanvas = document.getElementById('chart');
   chartCanvas.setAttribute('class', '');
+
+  var percentageClicksArray = [];
+  for (var i = 0; i < images.length; i++) {
+    var clicksPerView = images[i].clicks / images[i].views;
+    if (clicksPerView === NaN) {
+      clicksPerView = 0;
+    }
+    var clickPercentage = Math.floor(clicksPerView * 100);
+    // console.log('Clicks per View:', clickPercentage);
+    percentageClicksArray.push(clickPercentage);
+  }
 
   var imageNames = [];
   var imageClicks = [];
