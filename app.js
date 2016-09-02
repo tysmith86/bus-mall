@@ -5,9 +5,7 @@ var images = JSON.parse(localStorage.getItem('jsonImages'));
 var currentImageIndices = [0, 1, 2];
 var totalClicks = 0;
 
-// checks the length of local storage
-// if there is something in local storage, set the images array equal to that parsed value
-// if there is nothing in local storage, generate the image array from scratch
+// if images equals null, this code creates the images array
 if (!images) {
   images = [];
   for(var i = 0; i < imagePaths.length; i++) {
